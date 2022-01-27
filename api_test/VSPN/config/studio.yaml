@@ -1,0 +1,9 @@
+add:
+  "method": "post"
+  "url": "${test_url}/mgr/studio/add"
+  "json":
+    "studio_name": ${studio_name}
+    "contact": "郭郭"
+    "mobile": ${mobile}
+    "idcard": ${idcard}
+
