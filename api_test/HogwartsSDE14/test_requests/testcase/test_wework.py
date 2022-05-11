@@ -8,6 +8,7 @@ from HogwartsSDE14.test_requests.api.wework import WeWork
 
 
 class TestWework:
+
     def test_get(self):
         print(WeWork().test_get('20201212aa2'))
 
