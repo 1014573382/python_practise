@@ -5,8 +5,6 @@ import requests
 
 class BaseApi:
 
-
-
     def request_http(sel, req):
         # r = requests.request(method="get",url="https://qyapi.weixin.qq.com/cgi-bin/gettoken",
         #                      params={"corpid": self._corpid, "corpsecret": self._corpsecret})
