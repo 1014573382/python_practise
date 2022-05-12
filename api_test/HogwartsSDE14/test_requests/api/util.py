@@ -6,8 +6,8 @@ import requests
 
 class Util:
     # 加 _ 设置为私有变量
-    _corpid = "ww251b76973ac9fac6",
-    _corpsecret = "Ccx7iTSoHI9QSySmlbED4T9HP8raNJmYthKlee9kXEE"
+    _corpid = "ww3a33cee83b9fbd94",
+    _corpsecret = "jAjPyXtcYJZ1JJ2s2ZuyWbM4RXCi2lR4ZCy_lehcSKk"
 
     def get_token(self):
         """
@@ -23,6 +23,5 @@ class Util:
         }
 
         r = requests.get("https://qyapi.weixin.qq.com/cgi-bin/gettoken", params=request_param)
-        # print(r.json()['access_token'])
+        # print(r.json())
         return r.json()['access_token']
-        # print(r)
