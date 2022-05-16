@@ -14,6 +14,6 @@ class BaseApi:
         json_data = json.dumps(data)
         for key, value in self.params.items():
             json_data = json_data.replace('${' + key + '}', value)
-            print("json_data: ", json_data)
+            # print("json_data: ", json_data)
             data = json.loads(json_data)
             return requests.request(**data).json()

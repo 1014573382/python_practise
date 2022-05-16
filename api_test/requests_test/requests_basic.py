@@ -6,11 +6,11 @@ from jsonpath import jsonpath
 
 base_url = 'http://httpbin.org'
 
-r = requests.get(base_url + '/get')
-print(r.status_code)
-res = r.json()  # 对于响应值r先进行json编码
-print(res)
-assert res['headers']['Host'] == 'httpbin.org'
+# r = requests.get(base_url + '/get')
+# print(r.status_code)
+# res = r.json()  # 对于响应值r先进行json编码
+# print(res)
+# assert res['headers']['Host'] == 'httpbin.org'
 
 
 # r = requests.post(base_url + '/post')
@@ -51,25 +51,26 @@ assert res['headers']['Host'] == 'httpbin.org'
 # print(r.headers)  #获取响应头信息
 
 # post参数传递，用data关键字发送json请求，使用json.dumps对传入的变量进行转码
-# from_data = {'user':'guonian','password':'66666'}
-# r = requests.post(base_url + '/post', data=json.dumps(from_data))
-# # 使用json关键字参数，，Content-Type自动变为“application/json”
-# # r = requests.post(base_url + '/post', json=from_data)
-# print(r.text)  #获取响应内容
-# # print(r.headers)  #获取响应头信息
-# resjson = r.json()
-# assert jsonpath(resjson, "$.headers.Host")[0] == 'httpbin.org'
+from_data = {'user':'guonian','password':'66666'}
+r = requests.post(base_url + '/post', data=json.dumps(from_data))
+# 使用json关键字参数，，Content-Type自动变为“application/json”
+# r = requests.post(base_url + '/post', json=from_data)
+print(r.text)  #获取响应内容
+# print(r.headers)  #获取响应头信息
+resjson = r.json()
+print(type(resjson))
+assert jsonpath(resjson, "$.headers.Host")[0] == 'httpbin.org'
 # assert jsonpath(resjson, "$.url")[0] == 'http://httpbin.org/post'
 # assert jsonpath(resjson, "$['json']['password']")[0] == '66666'
 
 
-# # 请求头定制
-# from_data = {'user':'guoxl', 'password':'gxl1512'}
-# # print(type(from_data))
-# header = {'user-agent':'Mozilla/8.0'}
-# r = requests.post(base_url + '/post', data=from_data, headers=header)
-# print(r.text)
-# # print(r.json())  #以json格式展示响应内容
+# 请求头定制
+from_data = {'user':'guoxl', 'password':'gxl1512'}
+print(type(from_data))
+header = {'user-agent':'Mozilla/8.0'}
+r = requests.post(base_url + '/post', data=from_data, headers=header)
+print(r.text)
+# print(r.json())  #以json格式展示响应内容
 
 header = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'}
 r = requests.request('get', 'https://www.zhihu.com/explore', headers=header)
@@ -98,7 +99,7 @@ print(r.status_code)
 # # 设置超时时间,单位秒
 # r = requests.get(base_url + '/get', timeout = 0.005)
 # print(r.text)
-#
+# #
 # # 上传文件
 # file = {'file':open(r'E:\Picture\petimg\10.png','rb')}
 # r = requests.post(base_url + '/post',files=file)

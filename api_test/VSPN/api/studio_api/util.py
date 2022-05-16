@@ -2,12 +2,12 @@ import requests
 
 
 class Util():
-    _user_name = 'test2'
+    _username = 'test2'
     _password = 'e10adc3949ba59abbe56e057f20f883e'
 
     def get_token(self):
         requests_data = {
-            "user_name": self._user_name,
+            "user_name": self._username,
             "password": self._password
         }
 
