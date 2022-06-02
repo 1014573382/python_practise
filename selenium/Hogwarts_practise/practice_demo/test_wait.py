@@ -21,7 +21,7 @@ class TestWait:
     def test_wait(self):
         # self.driver.find_element(By.XPATH, '//*[@class="ember-view"]').click()
         # 点击 所有分类 列表
-        self.driver.find_element(By.XPATH, '//*[@id="ember41"]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="ember44"]').click()
 
         # 注意：wait函数后一定要加参数，因为until调用传给它的函数时，会传self._driver参数给这个函数，因此传给until的方法（即此处的wait）一定要有参数来接until传给它的参数
         def wait(x):
@@ -33,5 +33,11 @@ class TestWait:
         WebDriverWait(self.driver, 10).until(wait)
 
         # 直接使用 expected_conditions模块提供的方法
-        WebDriverWait(self.driver, 8).until(expected_conditions.element_to_be_clickable((By.XPATH, '//*[@class="table-heading"]')))
-        self.driver.find_element(By.XPATH, '//*[@title="在最近的一年，一月，一周或一天最活跃的主题"]').click()
+        # WebDriverWait(self.driver, 8).until(expected_conditions.element_to_be_clickable((By.XPATH, '//*[@class="table-heading"]')))
+
+        # 找到所有分类下的 热门 区域
+        WebDriverWait(self.driver, 10).until(lambda x: x.find_element(By.XPATH, '//*[@class="table-heading"]'))
+        WebDriverWait(self.driver, 8).until(expected_conditions.element_to_be_clickable((By.LINK_TEXT, '测试开发')))
+        self.driver.find_element(By.LINK_TEXT, '测试开发').click()
+
+
