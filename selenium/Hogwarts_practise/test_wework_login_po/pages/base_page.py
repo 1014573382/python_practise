@@ -1,5 +1,3 @@
-
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -21,7 +19,7 @@ class BasePage():
 
         if self._base_url != "":
             self._driver.get(self._base_url)
-        else:
-            self._driver.get("")
+        # else:
+        #     self._driver.get("https://work.weixin.qq.com/")
 
 
