@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++)
+        filterItems[i].hidden = false;
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>login_report.html</h1>
+    <p>Report generated on 26-May-2022 at 18:05:07 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>C:\Program Files\Java\jdk1.8.0_231</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "1.0.0", "py": "1.11.0", "pytest": "7.1.2"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.19042-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"html": "3.1.1", "metadata": "2.0.1"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.5</td></tr></table>
+    <h2>Summary</h2>
+    <p>1 tests ran in 0.31 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">har/login_test.py::TestCaseLogin::test_start</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">..\venv\lib\site-packages\httprunner\runner.py:455: in test_start<br/>    return self.run_testcase(<br/>..\venv\lib\site-packages\httprunner\runner.py:359: in run_testcase<br/>    extract_mapping = self.__run_step(step)<br/>..\venv\lib\site-packages\httprunner\runner.py:295: in __run_step<br/>    step_data = self.__run_step_request(step)<br/>..\venv\lib\site-packages\httprunner\runner.py:208: in __run_step_request<br/>    resp_obj.validate(<br/>..\venv\lib\site-packages\httprunner\response.py:282: in validate<br/>    raise ValidationFailure(failures_string)<br/><span class="error">E   httprunner.exceptions.ValidationFailure: assert status_code equal 200(int)	==&gt; fail</span><br/><span class="error">E   check_item: status_code</span><br/><span class="error">E   check_value: 0(int)</span><br/><span class="error">E   assert_method: equal</span><br/><span class="error">E   expect_value: 200(int)</span><br/><span class="error">E   assert body.code equal 0(int)	==&gt; fail</span><br/><span class="error">E   check_item: body.code</span><br/><span class="error">E   check_value: None(NoneType)</span><br/><span class="error">E   assert_method: equal</span><br/><span class="error">E   expect_value: 0(int)</span><br/> ------------------------------Captured stderr call------------------------------ <br/>--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=198078), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;runner.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\runner.py&#x27;), &#x27;function&#x27;: &#x27;test_start&#x27;, &#x27;level&#x27;: (name=&#x27;INFO&#x27;, no=20, icon=&#x27;ℹ️&#x27;), &#x27;line&#x27;: 450, &#x27;message&#x27;: &#x27;Start to run testcase: testcase description, TestCase ID: 91473b2d-c679-42d8-986f-8b90062e4de0&#x27;, &#x27;module&#x27;: &#x27;runner&#x27;, &#x27;name&#x27;: &#x27;httprunner.runner&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 253718, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=200075), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;runner.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\runner.py&#x27;), &#x27;function&#x27;: &#x27;__run_step&#x27;, &#x27;level&#x27;: (name=&#x27;INFO&#x27;, no=20, icon=&#x27;ℹ️&#x27;), &#x27;line&#x27;: 292, &#x27;message&#x27;: &#x27;run step begin: /v3/api/desktop_client/latest_version &gt;&gt;&gt;&gt;&gt;&gt;&#x27;, &#x27;module&#x27;: &#x27;runner&#x27;, &#x27;name&#x27;: &#x27;httprunner.runner&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 255715, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=256831), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;client.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\client.py&#x27;), &#x27;function&#x27;: &#x27;log_print&#x27;, &#x27;level&#x27;: (name=&#x27;DEBUG&#x27;, no=10, icon=&#x27;🐞&#x27;), &#x27;line&#x27;: 40, &#x27;message&#x27;: &#x27;\n================== request details ==================\nmethod   : POST\nurl      : https://api2.mubu.com/v3/api/desktop_client/latest_version\nheaders  : {\n    &quot;Content-Length&quot;: &quot;0&quot;\n}\ncookies  : {}\nbody     : None\n&#x27;, &#x27;module&#x27;: &#x27;client&#x27;, &#x27;name&#x27;: &#x27;httprunner.client&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 312471, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=259076), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;client.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\client.py&#x27;), &#x27;function&#x27;: &#x27;log_print&#x27;, &#x27;level&#x27;: (name=&#x27;DEBUG&#x27;, no=10, icon=&#x27;🐞&#x27;), &#x27;line&#x27;: 40, &#x27;message&#x27;: &#x27;\n================== response details ==================\nstatus_code : 0\nheaders  : {}\ncookies  : {}\nencoding : None\ncontent_type : \nbody     : \n&#x27;, &#x27;module&#x27;: &#x27;client&#x27;, &#x27;name&#x27;: &#x27;httprunner.client&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 314716, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=260090), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;client.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\client.py&#x27;), &#x27;function&#x27;: &#x27;request&#x27;, &#x27;level&#x27;: (name=&#x27;ERROR&#x27;, no=40, icon=&#x27;❌&#x27;), &#x27;line&#x27;: 215, &#x27;message&#x27;: &quot;HTTPSConnectionPool(host=&#x27;api2.mubu.com&#x27;, port=443): Max retries exceeded with url: /v3/api/desktop_client/latest_version (Caused by ProxyError(&#x27;Your proxy appears to only use HTTP and not HTTPS, try changing your proxy URL to be HTTP. See: https://urllib3.readthedocs.io/en/1.26.x/advanced-usage.html#https-proxy-error-http-proxy&#x27;, SSLError(SSLError(1, &#x27;[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1129)&#x27;))))&quot;, &#x27;module&#x27;: &#x27;client&#x27;, &#x27;name&#x27;: &#x27;httprunner.client&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 315730, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\connectionpool.py&quot;, line 700, in urlopen
+    self._prepare_proxy(conn)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\connectionpool.py&quot;, line 994, in _prepare_proxy
+    conn.connect()
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\connection.py&quot;, line 364, in connect
+    self.sock = conn = self._connect_tls_proxy(hostname, conn)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\connection.py&quot;, line 499, in _connect_tls_proxy
+    socket = ssl_wrap_socket(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\util\ssl_.py&quot;, line 453, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\util\ssl_.py&quot;, line 495, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock)
+  File &quot;D:\program\Python39\lib\ssl.py&quot;, line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File &quot;D:\program\Python39\lib\ssl.py&quot;, line 1040, in _create
+    self.do_handshake()
+  File &quot;D:\program\Python39\lib\ssl.py&quot;, line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLError: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1129)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\requests\adapters.py&quot;, line 440, in send
+    resp = conn.urlopen(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\connectionpool.py&quot;, line 785, in urlopen
+    retries = retries.increment(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\urllib3\util\retry.py&quot;, line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host=&#x27;api2.mubu.com&#x27;, port=443): Max retries exceeded with url: /v3/api/desktop_client/latest_version (Caused by ProxyError(&#x27;Your proxy appears to only use HTTP and not HTTPS, try changing your proxy URL to be HTTP. See: https://urllib3.readthedocs.io/en/1.26.x/advanced-usage.html#https-proxy-error-http-proxy&#x27;, SSLError(SSLError(1, &#x27;[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1129)&#x27;))))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\client.py&quot;, line 213, in request
+    response.raise_for_status()
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\client.py&quot;, line 25, in raise_for_status
+    raise self.error
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\client.py&quot;, line 231, in _send_request_safe_mode
+    return requests.Session.request(self, method, url, **kwargs)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\requests\sessions.py&quot;, line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\requests\sessions.py&quot;, line 645, in send
+    r = adapter.send(request, **kwargs)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\requests\adapters.py&quot;, line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host=&#x27;api2.mubu.com&#x27;, port=443): Max retries exceeded with url: /v3/api/desktop_client/latest_version (Caused by ProxyError(&#x27;Your proxy appears to only use HTTP and not HTTPS, try changing your proxy URL to be HTTP. See: https://urllib3.readthedocs.io/en/1.26.x/advanced-usage.html#https-proxy-error-http-proxy&#x27;, SSLError(SSLError(1, &#x27;[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1129)&#x27;))))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=263084), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;response.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\response.py&#x27;), &#x27;function&#x27;: &#x27;validate&#x27;, &#x27;level&#x27;: (name=&#x27;ERROR&#x27;, no=40, icon=&#x27;❌&#x27;), &#x27;line&#x27;: 275, &#x27;message&#x27;: &#x27;assert status_code equal 200(int)\t==&gt; fail\ncheck_item: status_code\ncheck_value: 0(int)\nassert_method: equal\nexpect_value: 200(int)&#x27;, &#x27;module&#x27;: &#x27;response&#x27;, &#x27;name&#x27;: &#x27;httprunner.response&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 318724, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\response.py&quot;, line 256, in validate
+    assert_func(check_value, expect_value, message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\builtin\comparators.py&quot;, line 10, in equal
+    assert check_value == expect_value, message
+AssertionError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=264116), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;response.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\response.py&#x27;), &#x27;function&#x27;: &#x27;validate&#x27;, &#x27;level&#x27;: (name=&#x27;ERROR&#x27;, no=40, icon=&#x27;❌&#x27;), &#x27;line&#x27;: 275, &#x27;message&#x27;: &#x27;assert body.code equal 0(int)\t==&gt; fail\ncheck_item: body.code\ncheck_value: None(NoneType)\nassert_method: equal\nexpect_value: 0(int)&#x27;, &#x27;module&#x27;: &#x27;response&#x27;, &#x27;name&#x27;: &#x27;httprunner.response&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 319756, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\response.py&quot;, line 256, in validate
+    assert_func(check_value, expect_value, message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\builtin\comparators.py&quot;, line 10, in equal
+    assert check_value == expect_value, message
+AssertionError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=265086), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;runner.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\runner.py&#x27;), &#x27;function&#x27;: &#x27;log_req_resp_details&#x27;, &#x27;level&#x27;: (name=&#x27;ERROR&#x27;, no=40, icon=&#x27;❌&#x27;), &#x27;line&#x27;: 194, &#x27;message&#x27;: &#x27;\n******************************** DETAILED REQUEST &amp; RESPONSE ********************************\n====== request details ======\nurl: https://api2.mubu.com/v3/api/desktop_client/latest_version\nmethod: POST\nheaders: {\&#x27;content-length\&#x27;: \&#x27;17\&#x27;, \&#x27;sec-ch-ua\&#x27;: \&#x27;&quot; Not A;Brand&quot;;v=&quot;99&quot;, &quot;Chromium&quot;;v=&quot;100&quot;, &quot;Google Chrome&quot;;v=&quot;100&quot;\&#x27;, \&#x27;version\&#x27;: \&#x27;3.0.0-2.0.0.1824\&#x27;, \&#x27;sec-ch-ua-mobile\&#x27;: \&#x27;?0\&#x27;, \&#x27;user-agent\&#x27;: \&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36\&#x27;, \&#x27;data-unique-id\&#x27;: \&#x27;475e7ca0-dcc7-11ec-81dc-9bcf8d5431fd\&#x27;, \&#x27;content-type\&#x27;: \&#x27;application/json;charset=UTF-8\&#x27;, \&#x27;accept\&#x27;: \&#x27;application/json, text/plain, */*\&#x27;, \&#x27;jwt-token\&#x27;: \&#x27;\&#x27;, \&#x27;x-request-id\&#x27;: \&#x27;22ca8fd5-99e7-4e1c-8ccb-f2923d4b3e5e\&#x27;, \&#x27;sec-ch-ua-platform\&#x27;: \&#x27;&quot;Windows&quot;\&#x27;, \&#x27;origin\&#x27;: \&#x27;https://mubu.com\&#x27;, \&#x27;sec-fetch-site\&#x27;: \&#x27;same-site\&#x27;, \&#x27;sec-fetch-mode\&#x27;: \&#x27;cors\&#x27;, \&#x27;sec-fetch-dest\&#x27;: \&#x27;empty\&#x27;, \&#x27;referer\&#x27;: \&#x27;https://mubu.com/\&#x27;, \&#x27;accept-encoding\&#x27;: \&#x27;gzip, deflate, br\&#x27;, \&#x27;accept-language\&#x27;: \&#x27;zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6\&#x27;, \&#x27;HRUN-Request-ID\&#x27;: \&#x27;HRUN-91473b2d-c679-42d8-986f-8b90062e4de0-507256\&#x27;}\nparams: {}\ndata: None\ncookies: {}\ntimeout: 120\nallow_redirects: True\nverify: False\njson: {\&#x27;reg_source\&#x27;: \&#x27;\&#x27;}\n\n====== response details ======\nstatus_code: 0\nheaders: {}\nbody: \&#x27;\&#x27;\n&#x27;, &#x27;module&#x27;: &#x27;runner&#x27;, &#x27;name&#x27;: &#x27;httprunner.runner&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 320726, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\runner.py&quot;, line 208, in __run_step_request
+    resp_obj.validate(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\response.py&quot;, line 282, in validate
+    raise ValidationFailure(failures_string)
+httprunner.exceptions.ValidationFailure: assert status_code equal 200(int)	==&gt; fail
+check_item: status_code
+check_value: 0(int)
+assert_method: equal
+expect_value: 200(int)
+assert body.code equal 0(int)	==&gt; fail
+check_item: body.code
+check_value: None(NoneType)
+assert_method: equal
+expect_value: 0(int)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+--- Logging error in Loguru Handler #0 ---
+Record was: {&#x27;elapsed&#x27;: datetime.timedelta(seconds=1, microseconds=266116), &#x27;exception&#x27;: None, &#x27;extra&#x27;: {}, &#x27;file&#x27;: (name=&#x27;runner.py&#x27;, path=&#x27;d:\\github_code\\httprunner_practise\\venv\\lib\\site-packages\\httprunner\\runner.py&#x27;), &#x27;function&#x27;: &#x27;test_start&#x27;, &#x27;level&#x27;: (name=&#x27;INFO&#x27;, no=20, icon=&#x27;ℹ️&#x27;), &#x27;line&#x27;: 460, &#x27;message&#x27;: &#x27;generate testcase log: D:\\github_code\\httprunner_practise\\demo\\logs\\91473b2d-c679-42d8-986f-8b90062e4de0.run.log&#x27;, &#x27;module&#x27;: &#x27;runner&#x27;, &#x27;name&#x27;: &#x27;httprunner.runner&#x27;, &#x27;process&#x27;: (id=19608, name=&#x27;MainProcess&#x27;), &#x27;thread&#x27;: (id=20608, name=&#x27;MainThread&#x27;), &#x27;time&#x27;: datetime(2022, 5, 26, 18, 5, 7, 321756, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), &#x27;中国标准时间&#x27;))}
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\runner.py&quot;, line 455, in test_start
+    return self.run_testcase(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\runner.py&quot;, line 359, in run_testcase
+    extract_mapping = self.__run_step(step)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\runner.py&quot;, line 295, in __run_step
+    step_data = self.__run_step_request(step)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\runner.py&quot;, line 208, in __run_step_request
+    resp_obj.validate(
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\httprunner\response.py&quot;, line 282, in validate
+    raise ValidationFailure(failures_string)
+httprunner.exceptions.ValidationFailure: assert status_code equal 200(int)	==&gt; fail
+check_item: status_code
+check_value: 0(int)
+assert_method: equal
+expect_value: 200(int)
+assert body.code equal 0(int)	==&gt; fail
+check_item: body.code
+check_value: None(NoneType)
+assert_method: equal
+expect_value: 0(int)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_handler.py&quot;, line 177, in emit
+    self._sink.write(str_record)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\loguru\_simple_sinks.py&quot;, line 26, in write
+    self._stream.write(message)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 41, in write
+    self.__convertor.write(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 162, in write
+    self.write_and_convert(text)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File &quot;d:\github_code\httprunner_practise\venv\lib\site-packages\colorama\ansitowin32.py&quot;, line 196, in write_plain_text
+    self.wrapped.flush()
+OSError: [WinError 6] 句柄无效。
+--- End of logging error ---
+<br/></div></td></tr></tbody></table></body></html>

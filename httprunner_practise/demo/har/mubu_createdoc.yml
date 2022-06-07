@@ -1,0 +1,693 @@
+config:
+    name: testcase description
+    variables: {}
+    verify: false
+teststeps:
+-   name: /v3/api/user/phone_login
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '65'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: ''
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 9d41b7f7-6c38-4a41-a197-bfd1a8154f85
+        json:
+            callbackType: 0
+            password: gxl10230701
+            phone: '15222186256'
+        method: POST
+        url: https://api2.mubu.com/v3/api/user/phone_login
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/user/profile
+    request:
+        data: ''
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '0'
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: f1de07c0-4ca6-4307-8d4a-8d37cf5256dc
+        method: POST
+        url: https://api2.mubu.com/v3/api/user/profile
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/get_all_documents_page
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '12'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 07ae2309-0b60-48bf-8718-cc6b49cd2c5c
+        json:
+            start: ''
+        method: POST
+        url: https://api2.mubu.com/v3/api/list/get_all_documents_page
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/star_relation/get
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 92aa82c8-d2e1-4992-aecc-b14156219467
+        method: GET
+        url: https://api2.mubu.com/v3/api/list/star_relation/get
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/user/get_user_params
+    request:
+        data: ''
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '0'
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 2e9348d0-d2c7-479d-a255-8c8499dbe070
+        method: POST
+        url: https://api2.mubu.com/v3/api/user/get_user_params
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/message/get_message_unread
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '10'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: ad926491-a99c-4e2c-ba88-4a359cb4aedc
+        json:
+            page: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/message/get_message_unread
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/user/get_onboard_state
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '2'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 5962168b-d1de-41c8-8e22-d58e02bddc23
+        json: {}
+        method: POST
+        url: https://api2.mubu.com/v3/api/user/get_onboard_state
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/item_count
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '30'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 3fa8b686-4337-4ed0-88a5-91a828f1103c
+        json:
+            folderId: 0
+            source: home
+        method: POST
+        url: https://api2.mubu.com/v3/api/list/item_count
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/advertisement/get
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '10'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 71adbabd-ebc0-4ef6-912c-cafec3e92b32
+        json:
+            type: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/advertisement/get
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/notify/new_tip/get
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '10'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: e41b9d6f-aa46-41d7-8bf0-01f2f6545c13
+        json:
+            type: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/notify/new_tip/get
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/create_doc
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '25'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 465ce0c5-e8fa-4bd0-a108-7484271fba48
+        json:
+            folderId: '0'
+            type: 0
+        method: POST
+        url: https://api2.mubu.com/v3/api/list/create_doc
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/item_count
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '30'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 55c6311f-6c6a-4de3-be66-b27422ee1936
+        json:
+            folderId: 0
+            source: home
+        method: POST
+        url: https://api2.mubu.com/v3/api/list/item_count
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/document/edit/get
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '37'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 8de9181e-6a01-44ff-aa30-a9143c06b585
+        json:
+            docId: 1GzYU6TExhc
+            password: ''
+        method: POST
+        url: https://api2.mubu.com/v3/api/document/edit/get
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/refer/doc/list
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '29'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            x-request-id: b3d838de-6a8a-4c00-b826-19649b04c673
+        json:
+            targetDocId: 1GzYU6TExhc
+        method: POST
+        url: https://api2.mubu.com/v3/api/refer/doc/list
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/colla/register
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            x-request-id: bb3e3686-5587-47db-a146-7ff88196da83
+        method: GET
+        url: https://api2.mubu.com/v3/api/colla/register
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/refer/node/count
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '29'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: 1797c216-d4f6-4f8e-876e-2e402f7ffdc4
+        json:
+            targetDocId: 1GzYU6TExhc
+        method: POST
+        url: https://api2.mubu.com/v3/api/refer/node/count
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/colla/members_v2
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '58'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            request-id: members:8101667156423848:1653640835485
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            x-request-id: 9a81c943-2ccc-422e-877c-cc844a454bff
+        json:
+            documentId: 1GzYU6TExhc
+            memberId: '8101667156423848'
+        method: POST
+        url: https://api2.mubu.com/v3/api/colla/members_v2
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/refer/search_refers
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '54'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            x-request-id: 2fb29589-9fb7-4177-bade-b2109bc3c607
+        json:
+            docId: 1GzYU6TExhc
+            keywords: 辩题
+            option: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/refer/search_refers
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/refer/search_refers
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '54'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            x-request-id: c3f038b4-7aa3-46b5-b61c-81c7ce83c6ec
+        json:
+            docId: 1GzYU6TExhc
+            keywords: 标题
+            option: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/refer/search_refers
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/list/item_count
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '30'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: c8c9d45f-b246-481e-a50f-7cdee4ee26e0
+        json:
+            folderId: 0
+            source: home
+        method: POST
+        url: https://api2.mubu.com/v3/api/list/item_count
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
+-   name: /v3/api/notify/new_tip/get
+    request:
+        headers:
+            accept: application/json, text/plain, */*
+            accept-encoding: gzip, deflate, br
+            accept-language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+            content-length: '10'
+            content-type: application/json;charset=UTF-8
+            data-unique-id: 99620c70-dd98-11ec-8003-35b78b1e9458
+            jwt-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhcHAiOiJtdWJ1Iiwic3ViIjoiOTAzNjU3MiIsImxvZ2luVHlwZSI6Im1vYmlsZSIsImV4cCI6MTY1NjIzMjgyNiwiaWF0IjoxNjUzNjQwODI2fQ.pAjYnbr7Lku5kzJ2Nr8dlZQx_V-2yO79frpxqSJcE-EznHQA5w3SXBYN6V2VqRXTz2UaMKCP9KTEocFe-Op-Kw
+            origin: https://mubu.com
+            referer: https://mubu.com/
+            sec-ch-ua: '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+            sec-fetch-dest: empty
+            sec-fetch-mode: cors
+            sec-fetch-site: same-site
+            user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+            version: 3.0.0-2.0.0.1824
+            x-request-id: caf293fb-1998-4791-8924-2d58bb9ed158
+        json:
+            type: 1
+        method: POST
+        url: https://api2.mubu.com/v3/api/notify/new_tip/get
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - body.code
+        - 0
