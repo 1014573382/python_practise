@@ -4,6 +4,7 @@ import pytest
 from appium import webdriver
 from appium.webdriver.extensions.android.gsm import GsmCallActions
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class TestBrowser():
@@ -55,3 +56,18 @@ class TestBrowser():
 
     def test_openbrowser(self):
         self.driver.get("http://www.baidu.com")
+        chrome_context = self.driver.current_context
+        sleep(2)
+        self.driver.switch_to.context("NATIVE_APP")
+        # 点击获取位置弹框的确定按钮
+        self.driver.find_element(By.ID, 'positive_button').click()
+        print("点击确定弹框后的context：", self.driver.current_context)
+        # 点击仅使用期间允许chrome获取位置信息
+        allowGPS_element = WebDriverWait(self.driver, 6).until(lambda x:x.find_element(By.XPATH, '//*[@text="仅使用期间允许"]'))
+        allowGPS_element.click()
+        # self.driver.find_element(By.ID, 'permission_allow_foreground_only_button').click()
+        sleep(1)
+        # print(self.driver.current_context)
+        self.driver.switch_to.context(chrome_context)
+        self.driver.find_element(By.CSS_SELECTOR, '#index-kw').send_keys("python")
+        self.driver.find_element(By.CSS_SELECTOR, '#index-bn').click()
