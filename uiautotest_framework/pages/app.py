@@ -18,18 +18,24 @@ class App(BasePage):
                 "appPackage": self._package,
                 "appActivity": self._activity,
                 "noReset": "true",
-                "dontStopAppOnReset": "true"
+                "dontStopAppOnReset": "true",
+                "skipServerInstallation": "true",
+                "skipDeviceInitialization": "true"
             }
             # caps["appPackage"] = self._package
             self._driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", caps)
         else:
-            # 如果已经初始化过driver了，就直接调用 start_activity() 方法启动应用
+            # 如果已经初始化过driver了，就直接调用 start_activity() 方法启动应用，它可以启动其他应用的页面
             # self.driver.launch_app() 这个方法不需要传入参数，会自动启动desired_cap中设置的activity
             self._driver.start_activity(self._package, self._activity)
-        self._driver.implicitly_wait(3)
+        self._driver.implicitly_wait(6)
         return self
 
     def main(self) -> Main:
+        """
+        进入首页
+        :return:
+        """
         return Main(self._driver)
 
 
