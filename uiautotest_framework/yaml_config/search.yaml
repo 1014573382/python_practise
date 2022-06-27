@@ -1,9 +1,17 @@
-home_search:
-  by: id
-  locator: home_search
-  action: click
-
 search:
-  by: id
-  locator: search_input_text
-  action: click
+  - by: id
+    locator: "search_input_text"
+    action: send
+    value: ${stock_name}
+  - by: id
+    locator: "search_input_text"
+    action: click
+  - by: xpath
+    locator: "//*[@resource-id='com.xueqiu.android:id/name'and@text='${stock_name}']"
+    action: click
+  - by: id
+    locator: "add_attention"
+    action: click
+  - by: id
+    locator: "add_attention"
+    action: click

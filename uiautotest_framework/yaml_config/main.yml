@@ -1,0 +1,13 @@
+goto_search:
+  - by: id
+    locator: "home_search"
+    action: click
+  - by: id
+    locator: "search_input_text"
+    action: send
+    value: 歌尔股份
+
+goto_stock:
+  - by: xpath
+    locator: '//*[@resource-id="android:id/tabs"]//*[@text="股票"]'
+    action: click
