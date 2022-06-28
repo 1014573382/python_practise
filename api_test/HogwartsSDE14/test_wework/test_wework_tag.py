@@ -4,7 +4,8 @@
 import pytest
 import requests
 import json
-from HogwartsSDE14.test_requests.api.util import Util
+
+from HogwartsSDE14.test_wework.api.util import Util
 
 
 class TestWeworkTag():

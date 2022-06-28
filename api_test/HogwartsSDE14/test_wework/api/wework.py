@@ -5,8 +5,8 @@ import pytest
 import requests
 import yaml
 
-from HogwartsSDE14.test_requests.api.baseapi import BaseApi
-from HogwartsSDE14.test_requests.api.util import Util
+from HogwartsSDE14.test_wework.api.baseapi import BaseApi
+from HogwartsSDE14.test_wework.api.util import Util
 
 
 class WeWork(BaseApi):

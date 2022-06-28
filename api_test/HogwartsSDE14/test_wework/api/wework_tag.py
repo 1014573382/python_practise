@@ -7,8 +7,8 @@ import json
 
 import yaml
 
-from HogwartsSDE14.test_requests.api.util import Util
-from HogwartsSDE14.test_requests.api.baseapi import BaseApi
+from HogwartsSDE14.test_wework.api.baseapi import BaseApi
+from HogwartsSDE14.test_wework.api.util import Util
 
 
 class WeworkTag(BaseApi):
