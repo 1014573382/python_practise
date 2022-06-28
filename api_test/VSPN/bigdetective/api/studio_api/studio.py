@@ -1,7 +1,7 @@
 import yaml
 
-from VSPN.api.baseapi import BaseApi
-from VSPN.api.studio_api.util import Util
+from VSPN.bigdetective.api.baseapi import BaseApi
+from VSPN.bigdetective.api.studio_api.util import Util
 
 
 class Studio(BaseApi):

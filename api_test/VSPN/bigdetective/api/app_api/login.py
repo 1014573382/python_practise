@@ -1,7 +1,7 @@
 import requests
 import yaml
 
-from VSPN.api.baseapi import BaseApi
+from VSPN.bigdetective.api.baseapi import BaseApi
 
 
 class Login(BaseApi):

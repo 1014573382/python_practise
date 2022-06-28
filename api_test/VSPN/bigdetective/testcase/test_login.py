@@ -1,6 +1,6 @@
 import pytest
 
-from VSPN.api.app_api.login import Login
+from VSPN.bigdetective.api.app_api.login import Login
 
 
 class TestLogin():
