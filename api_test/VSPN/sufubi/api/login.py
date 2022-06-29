@@ -38,10 +38,3 @@ class Login(BaseApi):
         # user_id = result["user_id"]
         print("token:", token)
         return token
-
-    def status(self):
-        data = {
-            "method": "get",
-            "url": self.test_env + "/api/user/status"
-        }
-        self.send(data)

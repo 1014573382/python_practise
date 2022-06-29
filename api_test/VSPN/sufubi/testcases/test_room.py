@@ -22,7 +22,7 @@ class TestRoom():
         room_id = re["room_id"]
 
     def test_join_room(self):
-        self.room.join(room_id)
+        self.room.join(100507)
 
     def test_room_detail(self):
         self.room.detail(room_id)
