@@ -31,7 +31,7 @@ class Game(BaseApi):
         """出牌，返回body为空"""
         data = {
             "method": "post",
-            "url": self.test_env + "/api/game/sothebys/loan",
+            "url": self.test_env + "/api/game/sothebys/play-cards",
             "json": {
                 "room_id": room_id,
                 "mode": mode,

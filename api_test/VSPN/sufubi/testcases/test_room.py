@@ -5,7 +5,7 @@ from VSPN.sufubi.api.room import Room
 
 class TestRoom():
 
-    room_id = 100435
+    room_id = 100521
 
     def setup(self):
         self.room = Room()
@@ -20,9 +20,10 @@ class TestRoom():
         re = self.room.create()
         global room_id
         room_id = re["room_id"]
+        self.room.join(room_id)
 
     def test_join_room(self):
-        self.room.join(100507)
+        self.room.join(room_id)
 
     def test_room_detail(self):
         self.room.detail(room_id)
@@ -61,8 +62,10 @@ class TestRoom():
         re = self.room.room_search(self.room_id)
         print("search_result: ", re)
 
-    @pytest.mark.skip
+    # @pytest.mark.skip
     def test_kick_people(self):
-        self.room.kick_people(self.room_id, 10000)
+        """踢人，传user_id"""
+        re = self.room.kick_people(self.room_id, 29)
+        assert re.status_code == 200
 
 

@@ -138,7 +138,7 @@ class Room(BaseApi):
         return self.send(data).json()
 
     def kick_people(self, room_id, user_id):
-        """踢人出房间"""
+        """踢人出房间，返回body为空"""
         data = {
             "method": "post",
             "url": self.test_env + "/api/room/kick",

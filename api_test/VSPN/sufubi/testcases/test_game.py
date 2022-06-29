@@ -14,10 +14,10 @@ class TestGame:
 
     def test_play_cards(self):
         """出牌，卡牌命名：色系编号｜拍卖方式编号｜星数｜序号"""
-        self.game.play_cards(self.room_id, [1241])
+        self.game.play_cards(self.room_id, ["4141"])
 
     def test_offer_price(self):
-        self.game.offer_price(self.room_id, 80)
+        self.game.offer_price(self.room_id, 5)
 
     def test_giveup(self):
         self.game.giveup(self.room_id)
