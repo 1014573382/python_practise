@@ -17,3 +17,5 @@ class Search(BasePage):
         """
         self.params["stock_name"] = stock_name
         self.steps("../yaml_config/search.yaml", "search")
+        self.back(2)  #加自选后返回两次
+

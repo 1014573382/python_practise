@@ -5,8 +5,8 @@ import random
 import pytest
 import requests
 
-from HogwartsSDE14.test_requests.api.util import Util
-from HogwartsSDE14.test_requests.api.wework import WeWork
+from HogwartsSDE14.test_wework.api.util import Util
+from HogwartsSDE14.test_wework.api.wework import WeWork
 
 
 def test_random_data():

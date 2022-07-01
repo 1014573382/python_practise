@@ -59,6 +59,12 @@ class BasePage:
                 if "send" == action:
                     self.find(step["by"], step["locator"]).send_keys(step["value"])
 
+    def back(self, num=1):
+        for i in range(num):
+            self._driver.back()
+
+    def screenshot(self, path):
+        return self._driver.save_screenshot(path)
 
     # def find(self, locator, value = None):
     #     try:

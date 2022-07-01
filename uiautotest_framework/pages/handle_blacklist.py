@@ -1,7 +1,10 @@
+import logging
+
 from selenium.webdriver.common.by import By
 
 
 def handle_blacklist(func):
+    logging.basicConfig(level=logging.INFO)
     """对黑名单元素进行处理的装饰器"""
     # _blacklist = [
     #     (By.ID, "tv_skip"),  # 首页的广告弹框
@@ -21,6 +24,8 @@ def handle_blacklist(func):
             instance.set_implicitly_wait(3)
             return element
         except Exception as e:
+            instance.screenshot("../screenshot/login.png")
+            logging.error("element not found, handle blacklist")
             instance.set_implicitly_wait(2)
             # 如果元素没找到，就进行黑名单处理
             if instance._error_num > instance._max_err_num:
