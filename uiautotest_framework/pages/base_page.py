@@ -11,9 +11,8 @@ class BasePage:
     # _driver: WebDriver
 
     _blacklist = [
-        (By.ID, "tv_skip"), #首页的广告弹框
-        (By.ID, "iv_action_back")  #跳转到登录页后点击叉叉关掉
-
+        (By.ID, "iv_action_back"),  #跳转到登录页后点击叉叉关掉
+        (By.ID, 'gt_one_login_nav_iv') # p40的登录页返回
     ]
     _max_err_num = 3
     _error_num = 0

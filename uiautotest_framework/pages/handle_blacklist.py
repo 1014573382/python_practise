@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.by import By
 
 
@@ -24,7 +25,11 @@ def handle_blacklist(func):
             instance.set_implicitly_wait(3)
             return element
         except Exception as e:
-            instance.screenshot("../screenshot/login.png")
+            # 发生异常后截图 并把截图保存到allure报告中，然后打印日志
+            instance.screenshot("../screenshot/error.png")
+            with open("../screenshot/error.png", 'rb')as f:
+                content = f.read()
+            allure.attach(content, "弹框截图", attachment_type=allure.attachment_type.PNG)
             logging.error("element not found, handle blacklist")
             instance.set_implicitly_wait(2)
             # 如果元素没找到，就进行黑名单处理

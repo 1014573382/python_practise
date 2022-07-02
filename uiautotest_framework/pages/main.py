@@ -5,13 +5,12 @@ from pages.stock import Stock
 
 
 class Main(BasePage):
-    # def click_skip_advertise(self):
-    #     """跳过启动页的广告，已经移到黑名单处理中"""
-    #     try:
-    #         self.find(By.ID, "tv_skip").click()
-    #         return self
-    #     except:
-    #         return self
+    def click_skip_advertise(self):
+        try:
+            self.find(By.ID, "tv_skip").click()
+            return self
+        except:
+            return self
 
     def goto_search(self):
         # self.find(By.ID, "home_search").click()

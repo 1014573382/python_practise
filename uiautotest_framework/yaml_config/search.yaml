@@ -12,6 +12,6 @@ search:
   - by: id
     locator: "add_attention"
     action: click
-  - by: id
-    locator: "add_attention"
-    action: click
+#  - by: id
+#    locator: "add_attention"
+#    action: click

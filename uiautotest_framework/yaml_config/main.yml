@@ -9,5 +9,5 @@ goto_search:
 
 goto_stock:
   - by: xpath
-    locator: '//*[@resource-id="android:id/tabs"]//*[@text="股票"]'
+    locator: '//*[@resource-id="android:id/tabs"]//*[@index="1"and @clickable="true"]'
     action: click
